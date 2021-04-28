@@ -1,0 +1,29 @@
+BIOS 663: Intermediate Linear Models
+Final Data Analysis Project
+
+Important Dates:
+1.	Monday April 19: Project proposals due
+2.	 Monday May 3  and Wednesday May 5: Short presentations in class
+3.	Thursday May 13:  Project report (which should be no more than 5 pages) due by 5pm.
+  
+Data Sets (you may choose to work on one of the following data sets or on your own data):
+1.	Plasma Retinol data:   http://lib.stat.cmu.edu/datasets/Plasma_Retinol
+2.	Wage data:   http://lib.stat.cmu.edu/datasets/CPS_85_Wages
+3.	 Body Fat data:   http://lib.stat.cmu.edu/datasets/bodyfat
+4.	Boston House Price data:   http://lib.stat.cmu.edu/datasets/boston
+5.	 Air Pollution data:   http://lib.stat.cmu.edu/datasets/NO2.dat
+6.	 Football data:   http://lib.stat.cmu.edu/datasets/profb
+7.	a useful website with many real world data\   https://statisticalhorizons.com/resources/data-sets.  You need to surf through the website for the detail of each data. 
+
+Through the project, you will find that missing observations are common in real world data.  How to deal with missing data can be complicated.  I find the blog from Paul Allison:   https://statisticalhorizons.com/sensitivity-analysis useful.  You may also check  https://www.ssc.wisc.edu/sscc/pubs/stata_mi_ex.htm and 
+https:// bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-015-0022-1. Enjoy reading. 
+
+Project Proposal:
+The project proposal should include the names of the group members (up to 4 members per group) and two data sets that your group would like towork on. Please rank the two data sets according to your preference, based on which I'll assign one to each group. Groups that work on the same data set are not allowed to communicate with each other and should perform their analysis independently.
+
+Short Presentations: Each group will give a ~15 minute presentation, covering
+1.	description of the data
+2.	description and justification of the analysis 
+3.	analysis results (including relevant descriptive statistics, tables, and graphs)
+4.	conclusions and discussions
+Each group’s presentation will be graded by your peers, based on the appropriateness of statistical analysis, effectiveness in communicating results, and clarity of the presentation. Final grade will be a weighted score of my score (50%) and your peers’ score (50%).

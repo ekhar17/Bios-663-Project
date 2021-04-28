@@ -1,0 +1,38 @@
+---
+title: "BIOS 663 Group Project - Wage Data"
+author: "Team Name (chosen by Sam)
+date: "5/3/2021"
+output: html_document
+---
+
+```{r,message=FALSE,warning=FALSE}
+#applicable packages
+library(tidyverse)
+library(dplyr)
+library(mosaic)
+#load data - Andrew
+wages <- read.csv("~/Bios-663-Project/CPS_85_Wages.txt", sep="")
+#load data - Others
+```
+
+### Presentation (15 minutes)
+1. description of the data
+2. description and justification of the analysis 
+3. analysis results (including relevant descriptive statistics, tables, and graphs)
+4. conclusions and discussions
+
+### EDA
+
+```{r}
+#head and missing values
+head(wages)
+#no missing values in the dataset
+a <- sum(complete.cases(wages))
+print(a)
+nrow(wages)
+```
+
+```{r}
+
+```
+
