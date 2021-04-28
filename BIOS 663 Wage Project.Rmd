@@ -1,6 +1,6 @@
 ---
 title: "BIOS 663 Group Project - Wage Data"
-author: "Team Name (chosen by Sam)
+author: "Team Name (chosen by Sam)"
 date: "5/3/2021"
 output: html_document
 ---
@@ -28,11 +28,170 @@ wages <- read.csv("~/Bios-663-Project/CPS_85_Wages.txt", sep="")
 head(wages)
 #no missing values in the dataset
 a <- sum(complete.cases(wages))
+b <- nrow(wages)
 print(a)
-nrow(wages)
+print(b)
+```
+```{r,include=FALSE}
+##counts of binary variables
+#South
+tally(wages$south)
+#Sex
+tally(wages$sex)
+#Union
+tally(wages$union)
+#Race
+tally(wages$race)
+#Occupation
+tally(wages$occupation)
+#Sector
+tally(wages$sector)
+#Marriage
+tally(wages$marriage)
+```
+
+South|Count
+----|----
+Lives in South|156
+Lives Elsewhere|378
+
+Sex|Count
+----|----
+Male|289
+Female|245
+
+Union|Count
+----|----
+Union Member|96
+Not Union Member|438
+
+Race|Count
+----|----
+White|440
+Hispanic|27
+Other|67
+
+Occupation|Count
+----|----
+Management|55
+Sales|38
+Clerical|97
+Service|83
+Professional|105
+Other|156
+
+Sector|Count
+----|----
+Manufacturing|99
+Construction|24
+Other|411
+
+Marital Status|Count
+----|----
+Married|350
+Unmarried|184
+
+
+```{r}
+##eda histograms of all numeric covariates
+#education
+wages %>% ggplot(aes(x=education)) + 
+  geom_histogram(binwidth=1) + 
+  labs(x='Years of Education', y='Count', title = 'Count of Years of Education')
+#experience
+wages %>% ggplot(aes(x=experience)) + 
+  geom_histogram(binwidth=5) + 
+  labs(x='Years of Experience', y='Count', title = 'Count of Years of Experience')
+#age
+wages %>% ggplot(aes(x=age)) + 
+  geom_histogram(binwidth=5) + 
+  labs(x='Years of Age', y='Count', title = 'Count of Years of Education')
+```
+### Interesting Metrics (group)
+
+```{r}
+#proportion of wages by sex
+a <- wages %>% filter(sex == 1) %>% sum(wages$wage)
+b <- wages %>% filter(sex == 0) %>% sum(wages$wage)
+c <- a+b
+prop_men <- a/c
+prop_women <- b/c
+print(prop_men)
+print(prop_women)
+#calculate proportion of men and women in data
+d <- count(wages$sex==1)/nrow(wages)
+e <- count(wages$sex==0)/nrow(wages)
+print(d)
+print(e)
+```
+
+- Women make up 47% of wages, Men make up 53% of wages but Women make up 46% of observations and men make up 54% of observations.
+
+```{r}
+#average wage by sex
+tapply(wages$wage, wages$sex, mean)
 ```
 
 ```{r}
-
+#average wage by education level
+tapply(wages$wage, wages$education, mean)
 ```
 
+```{r}
+#average wage by residence area
+tapply(wages$wage, wages$south, mean)
+```
+
+```{r}
+#average wage by experience level
+tapply(wages$wage, wages$experience, mean)
+```
+
+```{r}
+#average wage by union classification
+tapply(wages$wage, wages$union, mean)
+```
+
+```{r}
+#average wage by age
+tapply(wages$wage, wages$age, mean)
+```
+
+```{r}
+#average wage by race level
+tapply(wages$wage, wages$race, mean)
+```
+
+```{r}
+#average wage by occupation
+tapply(wages$wage, wages$occupation, mean)
+```
+
+```{r}
+#average wage by sector
+tapply(wages$wage, wages$sector, mean)
+```
+
+```{r}
+#average wage by marital status
+tapply(wages$wage, wages$marriage, mean)
+```
+
+### Backward Selection Regression Model
+
+```{r}
+#full model
+model.1 <- lm(wage ~ . ,data = wages)
+summary(model.1)
+```
+
+```{r}
+#step-wise backward model selection beginning with max model
+step(model.1, direction='backward')
+```
+
+```{r}
+#reduced model
+model.2 <- lm(wage ~ education+south+sex+experience+union+race+sector,data = wages)
+summary(model.2)
+```
