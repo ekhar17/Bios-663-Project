@@ -10,6 +10,7 @@ output: html_document
 library(tidyverse)
 library(dplyr)
 library(mosaic)
+library(car)
 #load data - Andrew
 wages <- read.csv("~/Bios-663-Project/CPS_85_Wages.txt", sep="")
 #load data - Others
@@ -32,6 +33,7 @@ b <- nrow(wages)
 print(a)
 print(b)
 ```
+
 ```{r,include=FALSE}
 ##counts of binary variables
 #South
@@ -186,6 +188,10 @@ summary(model.1)
 ```
 
 ```{r}
+vif(model.1)
+```
+
+```{r}
 #step-wise backward model selection beginning with max model
 step(model.1, direction='backward')
 ```
@@ -195,3 +201,6 @@ step(model.1, direction='backward')
 model.2 <- lm(wage ~ education+south+sex+experience+union+race+sector,data = wages)
 summary(model.2)
 ```
+
+
+#does this work?
