@@ -23,7 +23,26 @@ The project proposal should include the names of the group members (up to 4 memb
 
 Short Presentations: Each group will give a ~15 minute presentation, covering
 1.	description of the data
-2.	description and justification of the analysis 
+        -sample size
+        -what are variables/how many
+        -summary statistics
+        -categorical vs. numerical
+        
+2.	description and justification of the analysis
+        -justification for ANOVA tests?
+        -justification for regression models? (HILE Gauss)
+        -justification for certain type of model selection
+        -justification for transformations (wage)
+        -check VIF?
+        
 3.	analysis results (including relevant descriptive statistics, tables, and graphs)
+        -parameter estimates for final model estimate with interpretation for parameters (linear vs. log scale)
+        -ANOVA test results
+        -residual, QQ plots
+        
 4.	conclusions and discussions
+        -how much variability does the final model describe?
+        -does this tell us what is a significant predictor of a person's wage
+        -which group means are significantly different/not different?
+        
 Each group’s presentation will be graded by your peers, based on the appropriateness of statistical analysis, effectiveness in communicating results, and clarity of the presentation. Final grade will be a weighted score of my score (50%) and your peers’ score (50%).
