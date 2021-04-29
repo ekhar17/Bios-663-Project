@@ -195,3 +195,6 @@ step(model.1, direction='backward')
 model.2 <- lm(wage ~ education+south+sex+experience+union+race+sector,data = wages)
 summary(model.2)
 ```
+
+
+#does this work?
