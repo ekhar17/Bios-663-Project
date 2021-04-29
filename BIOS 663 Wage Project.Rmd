@@ -108,7 +108,14 @@ wages %>% ggplot(aes(x=experience)) +
 wages %>% ggplot(aes(x=age)) + 
   geom_histogram(binwidth=5) + 
   labs(x='Years of Age', y='Count', title = 'Count of Years of Education')
+#wage
+wages %>% ggplot(aes(x=wage)) + 
+  geom_histogram(binwidth=1) + 
+  labs(x='Wage', y='Count', title = 'Count of Wages')
 ```
+
+
+
 ### Interesting Metrics (group)
 
 ```{r}
