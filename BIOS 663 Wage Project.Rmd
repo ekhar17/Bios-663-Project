@@ -109,6 +109,23 @@ wages %>% ggplot(aes(x=age)) +
   geom_histogram(binwidth=5) + 
   labs(x='Years of Age', y='Count', title = 'Count of Years of Education')
 ```
+
+```{r}
+##eda dotplots of all numeric covariates vs. response
+#education
+wages %>% ggplot(aes(x=education,y=wage)) + 
+  geom_point() + 
+  labs(x='Years of Education', y='Wage', title = 'Count of Years of Education')
+#experience
+wages %>% ggplot(aes(x=experience,y=wage)) + 
+  geom_point() + 
+  labs(x='Years of Experience', y='Wage', title = 'Count of Years of Experience')
+#age
+wages %>% ggplot(aes(x=age,y=wage)) + 
+  geom_point() + 
+  labs(x='Years of Age', y='Wage', title = 'Count of Years of Education')
+```
+
 ### Interesting Metrics (group)
 
 ```{r}
