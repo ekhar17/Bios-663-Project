@@ -1,6 +1,6 @@
 ---
 title: "BIOS 663 Group Project - Wage Data"
-author: "Team Name (chosen by Sam)"
+author: "Wage Groupies"
 date: "5/3/2021"
 output: html_document
 ---
