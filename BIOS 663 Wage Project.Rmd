@@ -10,6 +10,7 @@ output: html_document
 library(tidyverse)
 library(dplyr)
 library(mosaic)
+library(car)
 #load data - Andrew
 wages <- read.csv("~/Bios-663-Project/CPS_85_Wages.txt", sep="")
 #load data - Others
@@ -32,6 +33,7 @@ b <- nrow(wages)
 print(a)
 print(b)
 ```
+
 ```{r,include=FALSE}
 ##counts of binary variables
 #South
@@ -183,6 +185,10 @@ tapply(wages$wage, wages$marriage, mean)
 #full model
 model.1 <- lm(wage ~ . ,data = wages)
 summary(model.1)
+```
+
+```{r}
+vif(model.1)
 ```
 
 ```{r}
