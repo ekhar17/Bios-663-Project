@@ -114,7 +114,12 @@ wages %>% ggplot(aes(x=wage)) +
   labs(x='Wage', y='Count', title = 'Count of Wages')
 ```
 
-
+Correlation plot:
+```{r}
+library("corrplot")
+M <- cor(wages)
+corrplot(M, type = "upper")
+```
 
 ### Interesting Metrics (group)
 
