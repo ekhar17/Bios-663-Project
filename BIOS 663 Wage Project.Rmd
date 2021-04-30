@@ -296,6 +296,38 @@ full_model = lm(log(wage) ~ education + south +sex + union+ age+race +occupation
 summary(full_model)
 ```
 
+We recheck the assumptions of the full model, to make sure HILE Gauss has been met. 
+
+### Determining whether to transform variables
+```{r}
+
+## Check assumptions
+stud_res = rstudent(full_model)
+hist(stud_res, main = "Histogram of the Studentized Residuals - Initial Model", breaks = 20, 
+     xlab = "Studentized Residuals")
+largest_res = stud_res %>% abs() %>% sort(decreasing = TRUE) %>% head(15)
+largest_res
+```
+Two observations have a a studentized residual of >4. This could be a potential outlier.
+```{r}
+wages[171,]
+wages[200,]
+```
+This 21 year old with 1 year of experience is getting $44.5/hour, which is a potential outlier. The other has a wage of $1 per hour. This is likely a typo??????
+
+########## Insert Mahlobis Distance analysis
+
+```{r}
+plot(full_model$fitted.values, stud_res, ylab = "Studentized Residuals", 
+     xlab = "Predicted Values", main = "Studentized Residuals vs Predicted Values Plot - Initial Model")
+abline(h=0, lty = 2, col = "blue")
+## Nice distribution
+hist(stud_res)
+ks.test(stud_res, pnorm, 0, 1)
+## p-value greater than 0.05
+```
+This means the normality assumption is met and the homogenous variance assumption is also met.
+
 
 ```{r}
 #step-wise backward model selection beginning with max model
