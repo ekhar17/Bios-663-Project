@@ -14,6 +14,8 @@ library(car)
 #load data - Andrew
 wages <- read.csv("~/Bios-663-Project/CPS_85_Wages.txt", sep="")
 #load data - Others
+#load data - Elena
+#wages <- read.csv("CPS_85_Wages.txt", sep="")
 ```
 
 ### Presentation (15 minutes)
@@ -190,22 +192,114 @@ tapply(wages$wage, wages$sector, mean)
 #average wage by marital status
 tapply(wages$wage, wages$marriage, mean)
 ```
+##########################################################################
 
-### Backward Selection Regression Model
+### Determining whether to transform variables
+```{r}
+## Initial Model
+model_inital <- lm(wage ~ . ,data = wages)
+
+## Check assumptions
+stud_res = rstudent(model_initial)
+hist(stud_res, main = "Histogram of the Studentized Residuals - Initial Model", breaks = 20, 
+     xlab = "Studentized Residuals")
+largest_res = stud_res %>% abs() %>% sort(decreasing = TRUE) %>% head(15)
+largest_res
+```
+One residual has a a studentized residual of 9.21. This could be a potential outlier.
+```{r}
+wages[171,]
+```
+This 21 year old with 1 year of experience is getting $44.5/hour, which is a potential outlier. We will keep him in the analysis for now and then reevaluate whether the outlier should be removed for the calculation of the final model. 
+
+We can see that there are many studentized residuals with values > 2, so the model does not fit all of the values well.
 
 ```{r}
-#full model
-model.1 <- lm(wage ~ . ,data = wages)
-summary(model.1)
+plot(model_inital$fitted.values, stud_res, ylab = "Studentized Residuals", 
+     xlab = "Predicted Values", main = "Studentized Residuals vs Predicted Values Plot - Initial Model")
+abline(h=0, lty = 2, col = "blue")
+## Heteroskadisity, has fan v shape
+ks.test(stud_res, pnorm, 0, 1)
+## p-value less than 0.05
 ```
+This means the normality assumption is violated and the homogenous variance assumption is also violated. We will use boxcox to determine how to transform the dependent variable (wage).
 
 ```{r}
-vif(model.1)
+library(MASS)
+y = MASS::boxcox(model_inital, plotit = TRUE,  lambda = seq(-.1, .1, by = 0.1))
+
 ```
+The log likelihood is maximized at -0.029292929, so we round down to 0 for interpretability. This means that we will use an ln(y) transformation, which makes sense as this is the variance stabilizing transformation for count data.
+
+We will briefly check to see if the transformation was helpful
+```{r}
+t_total_reg = lm(log(wage) ~ ., data = wages)
+
+stud_res1 = rstudent(t_total_reg)
+hist(stud_res1, main = "Histogram of the Studentized Residuals", breaks = 20, 
+     xlab = "Studentized Residuals")
+## Looks normal, longish right tail
+plot(t_total_reg$fitted.values, stud_res1, ylab = "Studentized Residuals", 
+     xlab = "Predicted Values", main = "Plot of Studentized Residuals versus Predicted Values")
+abline(h=0, lty = 2, col = "blue")
+## Less heteroskadicity, no clear trend
+ks.test(stud_res1, pnorm, 0, 1) 
+## P-value above 0.05, so not reject null, so no transforamtion is needed.
+
+```
+
+We see now the residuals are normally distributed (Kolmogorov Smirnov p-value > 0.05) the residuals have much more homoskedasticity, so the log transformation improved the model. Now we will check if we should transform any of the three continuos covariates.
+
+
+First all of the variables are scaled to be centered around 0.
+```{r}
+wages$age = wages$age - mean(wages$age)
+wages$education = wages$education - mean(wages$education)
+wages$experience = wages$experience - mean(wages$experience)
+
+x = wages$age
+x1 = x * log(x)
+summary(lm(log(wage)~ x + x1, data =  wages))
+## Not significant, so not transform ages
+
+x = wages$education
+x1 = x * log(x)
+summary(lm(log(wage)~ x + x1, data =  wages))
+## Not significant, so not transform education
+
+x = wages$experience
+x1 = x * log(x)
+summary(lm(log(wage)~ x + x1, data =  wages))
+## Not significant, so not transform experience
+```
+
+So apart from centering around 0, none of the continuous predictors  will be transformed. 
+
+Now we look at variance inflation factors to examine colinearity.
+
+```{r}
+ols_vif_tol(lm(log(wage) ~ ., data = wages)
+)
+
+```
+We can see that there is high variance inflation for education, experience and age. First we just remove experience since it has the highest VIF and see how that has changed.
+
+```{r}
+ols_vif_tol(lm(log(wage) ~ education + south +sex + union+ age+race +occupation +sector +marriage, data = wages)
+)
+
+```
+
+All the VIF's are close to one, meaning there is not high collinearity. Thus our full model will be 
+```{r}
+full_model = lm(log(wage) ~ education + south +sex + union+ age+race +occupation +sector +marriage, data = wages)
+summary(full_model)
+```
+
 
 ```{r}
 #step-wise backward model selection beginning with max model
-step(model.1, direction='backward')
+step(full_model, direction='backward')
 ```
 
 ```{r}
