@@ -175,8 +175,9 @@ ggplot(wages)+geom_boxplot(aes(y=wage,x=as.factor(south),color=as.factor(south))
 
 ```{r}
 #average wage by experience level
-tapply(wages$wage, wages$experience, mean)
-tapply(wages$wage, wages$experience, median)
+plot(tapply(wages$wage, wages$experience, mean))
+plot(tapply(wages$wage, wages$experience, median))
+
 ```
 
 ```{r}
@@ -187,8 +188,8 @@ tapply(wages$wage, wages$union, median)
 
 ```{r}
 #average wage by age
-tapply(wages$wage, wages$age, mean)
-tapply(wages$wage, wages$age, median)
+plot(tapply(wages$wage, wages$age, mean))
+plot(tapply(wages$wage, wages$age, median))
 ```
 
 ```{r}
@@ -219,7 +220,7 @@ tapply(wages$wage, wages$marriage, median)
 ### Determining whether to transform variables
 ```{r}
 ## Initial Model
-model_inital <- lm(wage ~ . ,data = wages)
+model_initial <- lm(wage ~ . ,data = wages)
 
 ## Check assumptions
 stud_res = rstudent(model_initial)
@@ -244,7 +245,7 @@ abline(h=0, lty = 2, col = "blue")
 ks.test(stud_res, pnorm, 0, 1)
 ## p-value less than 0.05
 ```
-This means the normality assumption is violated and the homogenous variance assumption is also violated. We will use boxcox to determine how to transform the dependent variable (wage).
+This means the normality assumption is violated and the homogeneous variance assumption is also violated. We will use boxcox to determine how to transform the dependent variable (wage).
 
 ```{r}
 library(MASS)
@@ -333,9 +334,24 @@ Two observations have a a studentized residual of >4. This could be a potential 
 wages[171,]
 wages[200,]
 ```
-This 21 year old with 1 year of experience is getting $44.5/hour, which is a potential outlier. The other has a wage of $1 per hour. This is likely a typo??????
+This 21 year old with 1 year of experience is getting \$44.5/hour, which is a potential outlier. The other has a wage of $1 per hour. This is likely a typo??????
 
-########## Insert Mahlobis Distance analysis
+########## Insert Mahalanobis Distance analysis
+
+```{r}
+nrow(wages)
+ncol(wages)
+D2 <- mahalanobis(x = wages, center = T, cov = var(wages))
+plot(density(D2, bw = 0.5),
+     main="Squared Mahalanobis distances, n=534, p=11") ; rug(D2)
+
+qqplot(qchisq(ppoints(nrow(wages)), df = 3), D2,
+       main = expression("Q-Q plot of Mahalanobis" * ~D^2 *
+                         " vs. quantiles of" * ~ chi[3]^2))
+abline(0, 1, col = 'gray')
+
+outlier_removed <- wages %>% filter(wage != 1)
+```
 
 ```{r}
 plot(full_model$fitted.values, stud_res, ylab = "Studentized Residuals", 
