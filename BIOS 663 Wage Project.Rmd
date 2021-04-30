@@ -500,6 +500,38 @@ marriage.aov <- aov(wage ~ marriage, data = wages)
 summary(marriage.aov)
 #p = 0.0201
 
+#Welch One-Way ANOVA
+#install.packages("rstatix")
+library("rstatix")
+
+#sex
+welch_anova_test(data=wages,formula = wage ~ sex)
+#p < 0.0001
+
+#south
+welch_anova_test(data=wages,formula = wage ~ south)
+#p = 0.0007
+
+#union
+welch_anova_test(data=wages,formula = wage ~ union)
+#p < 0.0001
+
+#race
+welch_anova_test(data=wages,formula = wage ~ race)
+#p = 0.032
+
+#occupation
+welch_anova_test(data=wages,formula = wage ~ occupation)
+#p < 0.0001
+
+#sector
+welch_anova_test(data=wages,formula = wage ~ sector)
+#p = 0.424
+
+#marriage
+welch_anova_test(data=wages,formula = wage ~ marriage)
+#p = 0.025
+
 ```
 
 
