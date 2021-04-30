@@ -243,12 +243,10 @@ plot(t_total_reg$fitted.values, stud_res1, ylab = "Studentized Residuals",
      xlab = "Predicted Values", main = "Plot of Studentized Residuals versus Predicted Values")
 abline(h=0, lty = 2, col = "blue")
 ## Less heteroskadicity, no clear trend
-ks.test(stud_res1, pnorm, 0, 1) 
-## P-value above 0.05, so not reject null, so no transforamtion is needed.
 
 ```
 
-We see now the residuals are normally distributed (Kolmogorov Smirnov p-value > 0.05) the residuals have much more homoskedasticity, so the log transformation improved the model. Now we will check if we should transform any of the three continuos covariates.
+We see now the residuals are normally distributed  the residuals have much more homoskedasticity, so the log transformation improved the model. Now we will check if we should transform any of the three continuos covariates.
 
 
 First all of the variables are scaled to be centered around 0.
@@ -336,7 +334,7 @@ step(full_model, direction='backward')
 
 ```{r}
 #reduced model
-model.2 <- lm(wage ~ education+south+sex+experience+union+race+sector,data = wages)
+model.2 <- lm(log(wage) ~ education+south+sex+experience+union+race+sector+age + marriage, data = wages)
 summary(model.2)
 ```
 
