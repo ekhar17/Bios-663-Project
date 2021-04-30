@@ -13,6 +13,7 @@ library(mosaic)
 library(car)
 #load data - Andrew
 wages <- read.csv("~/Bios-663-Project/CPS_85_Wages.txt", sep="")
+wages <- wages %>% mutate(log_wage = log(wage))
 #load data - Others
 #load data - Elena
 #wages <- read.csv("CPS_85_Wages.txt", sep="")
@@ -114,6 +115,11 @@ wages %>% ggplot(aes(x=age)) +
 wages %>% ggplot(aes(x=wage)) + 
   geom_density(fill="dodgerblue1",alpha=0.5) + 
   labs(x='Wage (dollars/hour)', y='Count', title = 'Count of Wages (dollars/hour)')
+
+#wage
+wages %>% ggplot(aes(x=log(wage))) + 
+  geom_density(fill="dodgerblue1",alpha=0.5) + 
+  labs(x='Log(Wage) (dollars/hour)', y='Count', title = 'Count of Logarithm of Wages (dollars/hour)')
 ```
 
 ```{r}
@@ -121,6 +127,11 @@ mean(wages$wage)
 median(wages$wage)
 range(wages$wage)
 favstats(wages$wage)
+
+mean(wages$log_wage)
+median(wages$log_wage)
+range(wages$log_wage)
+favstats(wages$log_wage)
 ```
 
 Correlation plot:
