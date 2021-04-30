@@ -220,7 +220,7 @@ tapply(wages$wage, wages$marriage, median)
 ### Determining whether to transform variables
 ```{r}
 ## Initial Model
-model_initial <- lm(wage ~ . ,data = wages)
+model_initial <- lm(wage ~ .,data = wages)
 
 ## Check assumptions
 stud_res = rstudent(model_initial)
@@ -368,6 +368,7 @@ This means the normality assumption is met and the homogenous variance assumptio
 ```{r}
 #step-wise backward model selection beginning with max model
 step(full_model, direction='backward')
+
 ```
 
 ```{r}
