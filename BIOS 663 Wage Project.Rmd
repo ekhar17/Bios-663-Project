@@ -232,7 +232,7 @@ tapply(wages$wage, wages$marriage, median)
 ### Determining whether to transform variables
 ```{r}
 ## Initial Model
-model_initial <- lm(wage ~ .,data = wages)
+model_initial <- lm(wage ~ education + south + sex + experience + union +age + race  + occupation + sector + marriage + education *sex + south * sex +  experience *sex + union *sex +age*sex + race*sex + sector*sex + occupation*sex + sector*sex + marriage*sex,data = wages)
 
 ## Check assumptions
 stud_res = rstudent(model_initial)
@@ -268,7 +268,7 @@ The log likelihood is maximized at -0.029292929, so we round down to 0 for inter
 
 We will briefly check to see if the transformation was helpful
 ```{r}
-t_total_reg = lm(log(wage) ~ ., data = wages)
+t_total_reg = lm(log(wage) ~ education + south + sex + experience + union +age + race + occupation + sector + marriage + education *sex + south * sex +  experience *sex + union *sex +age*sex + race*sex + sector*sex + occupation*sex + sector*sex + marriage*sex, data = wages)
 
 stud_res1 = rstudent(t_total_reg)
 hist(stud_res1, main = "Histogram of the Studentized Residuals", breaks = 20, 
@@ -286,10 +286,6 @@ We see now the residuals are normally distributed  the residuals have much more 
 
 First all of the variables are scaled to be centered around 0.
 ```{r}
-wages$age = wages$age - mean(wages$age)
-wages$education = wages$education - mean(wages$education)
-wages$experience = wages$experience - mean(wages$experience)
-
 x = wages$age
 x1 = x * log(x)
 summary(lm(log(wage)~ x + x1, data =  wages))
@@ -304,11 +300,15 @@ x = wages$experience
 x1 = x * log(x)
 summary(lm(log(wage)~ x + x1, data =  wages))
 ## Not significant, so not transform experience
+wages$age = wages$age - mean(wages$age)
+wages$education = wages$education - mean(wages$education)
+wages$experience = wages$experience - mean(wages$experience)
+
 ```
 
 So apart from centering around 0, none of the continuous predictors  will be transformed. 
 
-Now we look at variance inflation factors to examine colinearity.
+Now we look at variance inflation factors to examine colinearity. (We only examine main effects)
 
 ```{r}
 ols_vif_tol(lm(log(wage) ~ ., data = wages)
@@ -325,13 +325,13 @@ ols_vif_tol(lm(log(wage) ~ education + south +sex + union+ age+race +occupation 
 
 All the VIF's are close to one, meaning there is not high collinearity. Thus our full model will be 
 ```{r}
-full_model = lm(log(wage) ~ education + south +sex + union+ age+race +occupation +sector +marriage, data = wages)
+full_model = lm(log(wage) ~ education + south +sex + union+ age+race +occupation +sector +marriage + education *sex + south * sex  + union *sex +age*sex + race*sex + sector*sex + occupation*sex + sector*sex + marriage*sex, data = wages)
 summary(full_model)
 ```
 
 We recheck the assumptions of the full model, to make sure HILE Gauss has been met. 
 
-### Determining whether to transform variables
+
 ```{r}
 
 ## Check assumptions
@@ -348,7 +348,7 @@ wages[200,]
 ```
 This 21 year old with 1 year of experience is getting \$44.5/hour, which is a potential outlier. The other has a wage of $1 per hour. This is likely a typo??????
 
-########## Insert Mahalanobis Distance analysis
+##########  Mahalanobis Distance analysis
 
 ```{r}
 nrow(wages)
@@ -378,14 +378,16 @@ This means the normality assumption is met and the homogenous variance assumptio
 
 
 ```{r}
-#step-wise backward model selection beginning with max model
-step(full_model, direction='backward')
-
+#step(full_model, direction='backward', test = "F")
+#step-wise backward model selection beginning with max model 
+## Use BIC to not make model too big
+n = nrow(wages)
+step(full_model, direction='backward', test = "F", k = log(n))
 ```
 
 ```{r}
 #reduced model
-model.2 <- lm(log(wage) ~ education+south+sex+experience+union+race+sector+age + marriage, data = wages)
+model.2 <- lm(formula = log(wage) ~ education + south + sex + union + age + sex:age, data = wages)
 summary(model.2)
 ```
 
