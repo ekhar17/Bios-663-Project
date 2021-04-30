@@ -110,8 +110,14 @@ wages %>% ggplot(aes(x=age)) +
   labs(x='Years of Age', y='Count', title = 'Count of Years of Education')
 #wage
 wages %>% ggplot(aes(x=wage)) + 
-  geom_histogram(binwidth=1) + 
-  labs(x='Wage', y='Count', title = 'Count of Wages')
+  geom_density(fill="dodgerblue1",alpha=0.5) + 
+  labs(x='Wage (dollars/hour)', y='Count', title = 'Count of Wages (dollars/hour)')
+```
+```{r}
+mean(wages$wage)
+median(wages$wage)
+range(wages$wage)
+favstats(wages$wage)
 ```
 
 
@@ -139,51 +145,67 @@ print(e)
 ```{r}
 #average wage by sex
 tapply(wages$wage, wages$sex, mean)
+tapply(wages$wage, wages$sex, median)
+
+ggplot(wages)+geom_boxplot(aes(y=wage,x=as.factor(sex),color=as.factor(sex))) + labs(title="Hourly Wage by Sex",x="Sex (Male(0),Female(1))",y="Wage ($/hour)",color="Sex") 
 ```
 
 ```{r}
 #average wage by education level
 tapply(wages$wage, wages$education, mean)
+tapply(wages$wage, wages$education, median)
+
 ```
 
 ```{r}
 #average wage by residence area
 tapply(wages$wage, wages$south, mean)
+tapply(wages$wage, wages$south, median)
+
+ggplot(wages)+geom_boxplot(aes(y=wage,x=as.factor(south),color=as.factor(south)))
 ```
+
 
 ```{r}
 #average wage by experience level
 tapply(wages$wage, wages$experience, mean)
+tapply(wages$wage, wages$experience, median)
 ```
 
 ```{r}
 #average wage by union classification
 tapply(wages$wage, wages$union, mean)
+tapply(wages$wage, wages$union, median)
 ```
 
 ```{r}
 #average wage by age
 tapply(wages$wage, wages$age, mean)
+tapply(wages$wage, wages$age, median)
 ```
 
 ```{r}
 #average wage by race level
 tapply(wages$wage, wages$race, mean)
+tapply(wages$wage, wages$race, median)
 ```
 
 ```{r}
 #average wage by occupation
 tapply(wages$wage, wages$occupation, mean)
+tapply(wages$wage, wages$occupation, median)
 ```
 
 ```{r}
 #average wage by sector
 tapply(wages$wage, wages$sector, mean)
+tapply(wages$wage, wages$sector, median)
 ```
 
 ```{r}
 #average wage by marital status
 tapply(wages$wage, wages$marriage, mean)
+tapply(wages$wage, wages$marriage, median)
 ```
 
 ### Backward Selection Regression Model
@@ -220,3 +242,10 @@ wages %>%
   geom_point(aes(y = wage, x = age, color = factor(race))) +
   facet_grid(union~sex)
 ```
+
+### ANOVA test for wage by sex
+
+```{r}
+
+```
+
