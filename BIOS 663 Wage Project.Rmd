@@ -351,3 +351,271 @@ wages %>%
   geom_point(aes(y = wage, x = age, color = factor(race))) +
   facet_grid(union~sex)
 ```
+
+
+
+
+### ANOVA
+
+```{r}
+#Summary stats
+
+#look at wages by sex
+#mean wage higher for males
+group_by(wages, sex) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+#look at wages by south
+#mean wage higher if not in south
+group_by(wages, south) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+#look at wages by union
+#mean wage higher if in union
+group_by(wages, union) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+#look at wages by race
+#mean wage highest for white, lowest for hispanic
+group_by(wages, race) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+#look at wages by occupation
+#mean wage highest for management, lowest for service
+group_by(wages, occupation) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+#look at wages by sector
+#mean wage higest in sector 1 (manufacturing) lowest in sector 0 (other)
+group_by(wages, sector) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+#look at wages by marriage
+#mean wage higher if married
+group_by(wages, marriage) %>%
+  summarise(
+    count = n(),
+    mean = mean(wage, na.rm = TRUE),
+    sd = sd(wage, na.rm = TRUE)
+)
+
+
+```
+
+```{r}
+#Box plots
+#install.packages("ggpubr")
+library("ggpubr")
+
+#sex
+ggboxplot(wages, x = "sex", y = "wage", 
+          color = "sex", 
+          ylab = "Wage", xlab = "Sex")
+
+#south
+ggboxplot(wages, x = "south", y = "wage", 
+          color = "south", 
+          ylab = "Wage", xlab = "South")
+
+#union
+ggboxplot(wages, x = "union", y = "wage", 
+          color = "union", 
+          ylab = "Wage", xlab = "Union")
+
+#race
+ggboxplot(wages, x = "race", y = "wage", 
+          color = "race", 
+          ylab = "Wage", xlab = "Race")
+
+#occupation
+ggboxplot(wages, x = "occupation", y = "wage", 
+          color = "occupation", 
+          ylab = "Wage", xlab = "Occupation")
+
+#sector
+ggboxplot(wages, x = "sector", y = "wage", 
+          color = "sector", 
+          ylab = "Wage", xlab = "Sector")
+
+#marriage
+ggboxplot(wages, x = "marriage", y = "wage", 
+          color = "marriage", 
+          ylab = "Wage", xlab = "marriage")
+
+```
+
+```{r}
+#One-Way ANOVAs
+
+#sex
+sex.aov <- aov(wage ~ sex, data = wages)
+summary(sex.aov)
+#p < 0.0001
+
+#south
+south.aov <- aov(wage ~ south, data = wages)
+summary(south.aov)
+#p = 0.00108
+
+#union
+union.aov <- aov(wage ~ union, data = wages)
+summary(union.aov)
+#p = 0.000174
+
+#race
+race.aov <- aov(wage ~ race, data = wages)
+summary(race.aov)
+#p = 0.0286
+
+#occupation
+occupation.aov <- aov(wage ~ occupation, data = wages)
+summary(occupation.aov)
+#p = 0.258
+
+#sector
+sector.aov <- aov(wage ~ sector, data = wages)
+summary(sector.aov)
+#p = 0.295
+
+#marriage
+marriage.aov <- aov(wage ~ marriage, data = wages)
+summary(marriage.aov)
+#p = 0.0201
+
+```
+
+
+```{r}
+#Multiple Comparisons
+#install.packages("DescTools")
+require(DescTools)
+
+#race
+ScheffeTest(aov(wage ~ as.factor(race), data = wages))
+#none significant
+
+#occupation
+ScheffeTest(aov(wage ~ as.factor(occupation), data = wages))
+#significant: 
+#2 v 1
+#3 v 1
+#4 v 1
+#6 v 1
+#5 v 2
+#5 v 3
+#5 v 4
+#6 v 5
+
+#sector
+ScheffeTest(aov(wage ~ as.factor(sector), data = wages))
+#none significant
+
+```
+
+```{r}
+#check assumptions
+#install.packages("car")
+library(car)
+
+#homogeneity of variance assumption
+#sex
+plot(sex.aov, 1)
+leveneTest(wage ~ as.factor(sex), data = wages)
+#NOT MET
+
+#south
+plot(south.aov, 1)
+leveneTest(wage ~ as.factor(south), data = wages)
+#MET 
+
+#union
+plot(union.aov, 1)
+leveneTest(wage ~ as.factor(union), data = wages)
+#MET
+
+#race
+plot(race.aov, 1)
+leveneTest(wage ~ as.factor(race), data = wages)
+#MET
+
+#occupation
+plot(occupation.aov, 1)
+leveneTest(wage ~ as.factor(occupation), data = wages)
+#NOT MET
+
+#sector
+plot(sector.aov, 1)
+leveneTest(wage ~ as.factor(sector), data = wages)
+#MET
+
+#marriage
+plot(marriage.aov, 1)
+leveneTest(wage ~ as.factor(marriage), data = wages)
+#MET
+
+
+
+#normality assumption
+#sex
+plot(sex.aov, 2)
+sex.aov_residuals <- residuals(object = sex.aov)
+shapiro.test(x = sex.aov_residuals )
+#NOT MET
+
+#south
+plot(south.aov, 2)
+south.aov_residuals <- residuals(object = south.aov)
+shapiro.test(x = south.aov_residuals )
+#NOT MET 
+
+#union
+plot(union.aov, 2)
+union.aov_residuals <- residuals(object = union.aov)
+shapiro.test(x = union.aov_residuals )
+#NOT MET
+
+#race
+plot(race.aov, 2)
+race.aov_residuals <- residuals(object = race.aov)
+shapiro.test(x = race.aov_residuals )
+#NOT MET
+
+#occupation
+plot(occupation.aov, 2)
+occupation.aov_residuals <- residuals(object = occupation.aov)
+shapiro.test(x = occupation.aov_residuals )
+#NOT MET
+
+#sector
+plot(sector.aov, 2)
+sector.aov_residuals <- residuals(object = sector.aov)
+shapiro.test(x = sector.aov_residuals )
+#NOT MET
+
+#marriage
+plot(marriage.aov, 2)
+marriage.aov_residuals <- residuals(object = marriage.aov)
+shapiro.test(x = marriage.aov_residuals )
+#NOT MET
+
+```
+
+
