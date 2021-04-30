@@ -115,6 +115,7 @@ wages %>% ggplot(aes(x=wage)) +
   geom_density(fill="dodgerblue1",alpha=0.5) + 
   labs(x='Wage (dollars/hour)', y='Count', title = 'Count of Wages (dollars/hour)')
 ```
+
 ```{r}
 mean(wages$wage)
 median(wages$wage)
