@@ -117,9 +117,9 @@ wages %>% ggplot(aes(x=wage)) +
   labs(x='Wage (dollars/hour)', y='Count', title = 'Count of Wages (dollars/hour)')
 
 #wage
-wages %>% ggplot(aes(x=log(wage))) + 
-  geom_density(fill="dodgerblue1",alpha=0.5) + 
-  labs(x='Log(Wage) (dollars/hour)', y='Count', title = 'Count of Logarithm of Wages (dollars/hour)')
+wages %>% ggplot(aes(x=wage)) + 
+  geom_density(fill="dodgerblue1",alpha=0.5) + scale_x_continuous(trans='log') + 
+  labs(x='Wage (dollars/hour)', y='Count', title = 'Count of Wages (dollars/hour)')
 ```
 
 ```{r}
