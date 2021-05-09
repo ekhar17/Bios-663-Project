@@ -601,31 +601,31 @@ summary(marriage.aov)
 library("rstatix")
 
 #sex
-welch_anova_test(data=wages,formula = wage ~ sex)
+welch_anova_test(data=wages,formula = log(wage) ~ sex)
 #p < 0.0001
 
 #south
-welch_anova_test(data=wages,formula = wage ~ south)
+welch_anova_test(data=wages,formula = log(wage) ~ south)
 #p = 0.0007
 
 #union
-welch_anova_test(data=wages,formula = wage ~ union)
+welch_anova_test(data=wages,formula = log(wage) ~ union)
 #p < 0.0001
 
 #race
-welch_anova_test(data=wages,formula = wage ~ race)
+welch_anova_test(data=wages,formula = log(wage) ~ race)
 #p = 0.032
 
 #occupation
-welch_anova_test(data=wages,formula = wage ~ occupation)
+welch_anova_test(data=wages,formula = log(wage) ~ occupation)
 #p < 0.0001
 
 #sector
-welch_anova_test(data=wages,formula = wage ~ sector)
+welch_anova_test(data=wages,formula = log(wage) ~ sector)
 #p = 0.424
 
 #marriage
-welch_anova_test(data=wages,formula = wage ~ marriage)
+welch_anova_test(data=wages,formula = log(wage) ~ marriage)
 #p = 0.025
 
 ```
