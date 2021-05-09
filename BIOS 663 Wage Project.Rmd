@@ -662,42 +662,45 @@ ScheffeTest(aov(wage ~ as.factor(sector), data = wages))
 #check assumptions
 #install.packages("car")
 library(car)
+#install.packages("onewaytests")
+library(onewaytests)
 
 #homogeneity of variance assumption
+
 #sex
 plot(sex.aov, 1)
-leveneTest(wage ~ as.factor(sex), data = wages)
+bf.test(wage ~ as.factor(sex), data = wages) #Brown-Forsythe test
 #NOT MET
 
 #south
 plot(south.aov, 1)
-leveneTest(wage ~ as.factor(south), data = wages)
-#MET 
+bf.test(wage ~ as.factor(south), data = wages)
+#NOT MET 
 
 #union
 plot(union.aov, 1)
-leveneTest(wage ~ as.factor(union), data = wages)
-#MET
+bf.test(wage ~ as.factor(union), data = wages)
+#NOT MET
 
 #race
 plot(race.aov, 1)
-leveneTest(wage ~ as.factor(race), data = wages)
-#MET
+bf.test(wage ~ as.factor(race), data = wages)
+#NOT MET
 
 #occupation
 plot(occupation.aov, 1)
-leveneTest(wage ~ as.factor(occupation), data = wages)
+bf.test(wage ~ as.factor(occupation), data = wages)
 #NOT MET
 
 #sector
 plot(sector.aov, 1)
-leveneTest(wage ~ as.factor(sector), data = wages)
+bf.test(wage ~ as.factor(sector), data = wages)
 #MET
 
 #marriage
 plot(marriage.aov, 1)
-leveneTest(wage ~ as.factor(marriage), data = wages)
-#MET
+bf.test(wage ~ as.factor(marriage), data = wages)
+#NOT MET
 
 
 
@@ -743,6 +746,7 @@ plot(marriage.aov, 2)
 marriage.aov_residuals <- residuals(object = marriage.aov)
 shapiro.test(x = marriage.aov_residuals )
 #NOT MET
+
 
 ```
 
